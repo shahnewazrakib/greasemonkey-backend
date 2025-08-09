@@ -568,7 +568,7 @@ export const downloadReport = async (req, res) => {
     browser = await puppeteer.launch({
       headless: "new",
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
-      // executablePath: "/usr/bin/chromium-browser",
+      executablePath: "/opt/render/.cache/puppeteer/chrome/linux-138.0.7204.168/chrome-linux64/chrome",
     });
 
     const page = await browser.newPage();
