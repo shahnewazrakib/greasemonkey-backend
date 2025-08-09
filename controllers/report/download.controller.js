@@ -568,7 +568,7 @@ export const downloadReport = async (req, res) => {
     // Launch puppeteer
     browser = await puppeteer.launch({
       headless: "new",
-      args: ["--no-sandbox", "--disable-setuid-sandbox", "--single-process", "--no-zygote"],
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
       executablePath:
         process.env.NODE_ENV === "production"
           ? process.env.PUPPETEER_EXECUTABLE_PATH
