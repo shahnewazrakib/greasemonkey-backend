@@ -290,7 +290,9 @@ export const downloadReport = async (req, res) => {
       );
 
     const exteriorImages = `<div class="exterior-images">
-      ${report.vehicle.featuredPhotos.map((photo) => `<img src="${photo}"/>`).join("")}
+      ${report.vehicle.featuredPhotos
+        .map((photo) => `<img src="${photo}"/>`)
+        .join("")}
     </div>`;
 
     reportHtmlTemplate = reportHtmlTemplate.replace(
@@ -388,12 +390,11 @@ export const downloadReport = async (req, res) => {
       .replace("{{overallRating}}", overallRating.toFixed(1))
       .replace("{{overallRatingStars}}", overallRatingStars);
 
-    reportHtmlTemplate = reportHtmlTemplate
-      .replace(
-        "{{componentsRatings}}",
-        components
-          .map((component) => {
-            return `<div class="card">
+    reportHtmlTemplate = reportHtmlTemplate.replace(
+      "{{componentsRatings}}",
+      components
+        .map((component) => {
+          return `<div class="card">
             <div class="title-bar">
               <h5 class="heading-3 clear-margin">${component.title}</h5>
               <h5 class="heading-3 clear-margin">${component.avgRating}</h5>
@@ -405,9 +406,9 @@ export const downloadReport = async (req, res) => {
               <a href="#${component.key}">View more</a>
             </p>
           </div>`;
-          })
-          .join("")
-      )
+        })
+        .join("")
+    );
 
     reportHtmlTemplate = reportHtmlTemplate
       .replace("{{inspectorComment}}", report.inspectorComment || "")
@@ -567,8 +568,11 @@ export const downloadReport = async (req, res) => {
     // Launch puppeteer
     browser = await puppeteer.launch({
       headless: "new",
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
-      executablePath: "/opt/render/.cache/puppeteer/chrome/linux-138.0.7204.168/chrome-linux64/chrome",
+      args: ["--no-sandbox", "--disable-setuid-sandbox", "--single-process", "--no-zygote"],
+      executablePath:
+        process.env.NODE_ENV === "production"
+          ? process.env.PUPPETEER_EXECUTABLE_PATH
+          : puppeteer.executablePath(),
     });
 
     const page = await browser.newPage();
